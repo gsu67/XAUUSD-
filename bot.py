@@ -2,7 +2,7 @@
 Gold (XAU/USD) Telegram Signal Bot
 -----------------------------------
 Price source: gold-api.com public spot price endpoint (XAU, no API key required)
-Signal logic: MA5 / MA10 / MA30 crossover + RSI(6)
+Signal logic: MA5 / MA10 / MA30 crossover + RSI(15)
 Features: 3-hour rolling BUY/SELL/HOLD breakdown, inline Refresh/Start/Stop buttons,
           /status, /price, /start, /stop commands, Flask self-ping server for Render free tier.
 
@@ -71,7 +71,7 @@ GOLD_API_URL = "https://api.gold-api.com/price/XAU"
 
 POLL_INTERVAL_SECONDS = 60   # 1 minute
 HISTORY_MAXLEN = 60
-RSI_PERIOD = 6
+RSI_PERIOD = 15
 MA_SHORT = 5
 MA_MED = 10
 MA_LONG = 30
@@ -173,7 +173,7 @@ def calculate_rsi(data, period=RSI_PERIOD):
 
 def generate_signal():
     """
-    Returns one of 'BUY', 'SELL', 'HOLD' based on MA5/MA10/MA30 crossover + RSI(6),
+    Returns one of 'BUY', 'SELL', 'HOLD' based on MA5/MA10/MA30 crossover + RSI(15),
     filtered for confidence: requires meaningful MA separation and RSI clearly
     past the midline. Returns None if not enough data yet.
     """
@@ -259,7 +259,7 @@ def build_status_message(price, signal, rsi):
         f"💰 Price: ${price:,.2f}\n"
         f"📊 Signal: *{signal_display}*\n\n"
         f"MA5: {ma5_display} | MA10: {ma10_display} | MA30: {ma30_display}\n"
-        f"RSI(6): {rsi_display}\n\n"
+        f"RSI(15): {rsi_display}\n\n"
         f"📈 Last {ROLLING_WINDOW_HOURS}h breakdown:\n"
         f"  BUY: {breakdown['BUY']}% | SELL: {breakdown['SELL']}% | HOLD: {breakdown['HOLD']}%\n\n"
         f"🕐 {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC"
